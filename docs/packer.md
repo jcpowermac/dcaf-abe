@@ -1,6 +1,6 @@
 ## Introduction
 
-The Packer-based build process of kragle provides an automated method of building an all-encompasing qcow2 image.
+The Packer-based build process of dcaf-abe provides an automated method of building an all-encompasing qcow2 image.
 
 ## Requirements
 1. Recent Linux distribution (tested on CentOS 7.1, RHEL 7.1 and Fedora 22)
@@ -21,10 +21,10 @@ The container has been pre-installed with the necessary software to execute the 
 ### Build Process
 The following steps will build the container if you do not use the one that should be available on the Docker Registry.
 
-1. `git clone https://github.com/csc/kragle; cd kragle` - Clone project from github and change directory to kragle.
-2. `docker build -t kragle .` - build container.
+1. `git clone https://github.com/csc/dcaf-abe; cd dcaf-abe` - Clone project from github and change directory to dcaf-abe.
+2. `docker build -t dcaf-abe .` - build container.
 
-Once the container is built we can continue with using Packer to build the qcow2 image of the Kragle node.
+Once the container is built we can continue with using Packer to build the qcow2 image of the dcaf-abe node.
 
 
 
@@ -42,7 +42,7 @@ To execute a virtual machine in the container the following required options nee
 - [Docker Volumes](https://docs.docker.com/userguide/dockervolumes/)
   - KVM device (`-v /dev/kvm:/dev/kvm:rw`)
   - TUN device (`-v /dev/net/tun:/dev/net/tun:rw`)
-  - Build directory (`-v path:/build kragle-packer-build`)
+  - Build directory (`-v path:/build dcaf-abe-packer-build`)
     - This is your location on the filesystem where the qcow2 output will be available and where Packer will retrieve the RHEL ISO specifically `path/os/rhel-server-7.1-x86_64-dvd.iso`
 
 There are two optional parameters:
@@ -55,7 +55,7 @@ There are two optional parameters:
 The `--username` and `--password` options are used for Red Hat Subscription Manage.  
 The `--packer` option is the command line arguments that need to be passed to execute a proper build.
 
-**NOTE:** Currently this should only be `--packer "build /opt/kragle/rhel7.json"`
+**NOTE:** Currently this should only be `--packer "build /opt/dcaf-abe/rhel7.json"`
 
 **NOTE:** Do not connect via VNC until Packer has outputted `Waiting for SSH to become available...` otherwise the build will fail.
 
@@ -70,19 +70,19 @@ docker run \
 -v /dev/kvm:/dev/kvm:rw \
 -v /dev/net/tun:/dev/net/tun:rw \
 -v path:/build \
-kragle \
+dcaf-abe \
 --username REDACTED \
 --password REDACTED \
---packer "build /opt/kragle/rhel7.json"
+--packer "build /opt/dcaf-abe/rhel7.json"
 ```
 
 ## Transferring the image
-Once the image has been created it will be available `path/output/packer-kragle-qcow2`.  This image can be converted to any format that `qemu-img` supports, in our example we will be using raw.
+Once the image has been created it will be available `path/output/packer-dcaf-abe-qcow2`.  This image can be converted to any format that `qemu-img` supports, in our example we will be using raw.
 
 ### Convert to RAW
 Before getting started lets install `qemu-img` via `yum install qemu-img -y`
 ```bash
-qemu-img convert -O raw packer-kragle-qcow2 kragle.raw
+qemu-img convert -O raw packer-dcaf-abe-qcow2 dcaf-abe.raw
 ```
 
 ### Process for physical hardware
@@ -90,7 +90,7 @@ qemu-img convert -O raw packer-kragle-qcow2 kragle.raw
 Below is an example of `dd` required command line options and execution.  First you will need to run `fdisk -l` to determine which disk you would like to write the image to and replace `of=/dev/vda` with that device name.  
 
 ```bash
-dd if=kragle.raw of=/dev/vda bs=64k conv=noerror,sync
+dd if=dcaf-abe.raw of=/dev/vda bs=64k conv=noerror,sync
 ```
 
 **WARNING:** The dd command is unforgiving, it will overwrite a disk at will.

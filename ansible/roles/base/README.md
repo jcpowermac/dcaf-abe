@@ -1,7 +1,7 @@
 Base
 =========
 
-This role will prepare the kragle autodeploynode with the all the resources needed to deploy Red Hat OpenStack on RHEL. It will install the necessary packages, configure them and clone the required git repositories.
+This role will prepare the dcaf-abe autodeploynode with the all the resources needed to deploy Red Hat OpenStack on RHEL. It will install the necessary packages, configure them and clone the required git repositories.
 
 Requirements
 ------------
@@ -21,7 +21,7 @@ The role depends on the requirements listed above.
 Playbook
 --------
 
-The role is included in the main.yml in kragle/ansible
-From the root directory of the kragle repo
+The role is included in the main.yml in dcaf-abe/ansible
+From the root directory of the dcaf-abe repo
 
     ansible-playbook ansible/main.yml

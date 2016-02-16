@@ -1,10 +1,10 @@
 ---
 # This play will download the initial source project to the
 # /opt/autodeploy/projects directory. All other plays will be run from those
-# projects. Change into the /opt/autodeploy/projects/kragle/ansible directory
+# projects. Change into the /opt/autodeploy/projects/dcaf-abe/ansible directory
 # to continue installation.
 
-- name: Download the Kragle source repo
+- name: Download the dcaf-abe source repo
   hosts: localhost
   gather_facts: false
 
@@ -14,7 +14,7 @@
     resources_base_path: "{{ autodeploy_base_path }}/resources"
 
     git_repos:
-      - { name: "kragle", repo: "git@github.com:csc/kragle.git" }
+      - { name: "dcaf-abe", repo: "git@github.com:csc/dcaf-abe.git" }
 
   tasks:
 

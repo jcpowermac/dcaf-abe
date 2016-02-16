@@ -1,12 +1,12 @@
 ---
-- name: Base configure kragle
+- name: Base configure dcaf-abe
   hosts: all
   gather_facts: true
   roles:
     - base
-    - kragle-packer
+    - dcaf-abe-packer
 
-- include: /tmp/packer-provisioner-ansible-local/site_docker.yml 
-- include: /tmp/packer-provisioner-ansible-local/site_discovery.yml 
+- include: /tmp/packer-provisioner-ansible-local/site_docker.yml
+- include: /tmp/packer-provisioner-ansible-local/site_discovery.yml
   vars:
-    packer: true 
+    packer: true

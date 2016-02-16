@@ -16,9 +16,10 @@
 # chmod 0600 ~/github.pem
 
 # Once these prerequisites are in place, the script can be executed by:
-# curl https://raw.githubusercontent.com/csc/kragle/master/ansible/build.sh | bash
+# curl https://raw.githubusercontent.com/csc/dcaf-abe/master/ansible/build.sh | bash
 
 # TODO Add error handling to exit if a command fails along the way
+set -eu -o pipefail
 
 subscription-manager register --username=$RHN_USER  --password=$RHN_PASS
 subscription-manager attach --pool=$RHN_POOL
@@ -36,9 +37,9 @@ make rpm
 yum -y --nogpgcheck localinstall ./rpm-build/ansible-*.noarch.rpm
 cd ..
 
-wget https://raw.githubusercontent.com/csc/kragle/master/ansible/initial_stage.yml
+wget https://raw.githubusercontent.com/csc/dcaf-abe/master/ansible/initial_stage.yml
 ansible-playbook initial_stage.yml --extra-vars "github_key_file=~/github.pem"
-cd /opt/autodeploy/projects/kragle/ansible
+cd /opt/autodeploy/projects/dcaf-abe/ansible
 
 ansible-playbook stage_resources.yml --extra-vars "github_key_file=~/github.pem rhn_user=$RHN_USER rhn_pass=$RHN_PASS"
 ansible-playbook main.yml --extra-vars "github_key_file=~/github.pem"

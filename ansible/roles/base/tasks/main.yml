@@ -9,14 +9,14 @@
 
 - name: Install required pip-based support packages (Online)
   pip:
-    requirements: "{{ projects_base_path }}/kragle/ansible/files/pip-requirements.txt"
+    requirements: "{{ projects_base_path }}/dcaf-abe/ansible/files/pip-requirements.txt"
     state: present
     extra_args: "--upgrade"
   when: not offline
 
 - name: Install required pip-based support packages (Offline)
   pip:
-    requirements: "{{ projects_base_path }}/kragle/ansible/files/pip-requirements.txt"
+    requirements: "{{ projects_base_path }}/dcaf-abe/ansible/files/pip-requirements.txt"
     state: present
     extra_args: "--index-url=file://{{ packages_path }}simple/"
   when: offline
