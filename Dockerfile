@@ -9,16 +9,16 @@ RUN yum -y update \
   && pip install ansible \
   && pip install requests \
   && yum clean all
-  
+
 RUN mkdir /opt/packer \
   && cd /opt/packer \
   && wget -nv $(python -c 'import requests;print "https://dl.bintray.com/mitchellh/packer/packer_%s_linux_amd64.zip" % requests.get("https://api.github.com/repos/mitchellh/packer/tags").json()[0]["name"].replace("v","")') -O /opt/packer/packer.zip \
   && unzip packer.zip
 
-COPY . /opt/kragle
+COPY . /opt/dcaf-abe
 
 EXPOSE 5900
 WORKDIR /build
-ENTRYPOINT ["/opt/kragle/docker-entrypoint.py"]
+ENTRYPOINT ["/opt/dcaf-abe/docker-entrypoint.py"]
 CMD ["--help"]
 

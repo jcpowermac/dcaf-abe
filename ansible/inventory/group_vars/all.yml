@@ -8,7 +8,7 @@ github_key_file:
 offline: false
 usb_hdd: /mnt/sdb
 use_scaleio: true
-use_wiley: true
+use_dcaf-bada: true
 
 # Autodeploy common vars
 autodeploy_base_path: /opt/autodeploy
@@ -19,8 +19,8 @@ iso_path: "{{ resources_base_path }}/ISO/"
 packages_path: "{{ resources_base_path }}/packages/"
 projects_base_path: "{{ autodeploy_base_path }}/projects"
 resources_base_path: "{{ autodeploy_base_path }}/resources"
-epel_rpm_file: "{{ projects_base_path }}/kragle/ansible/files/epel_rpm_packages.txt"
-rhn_rpm_file: "{{ projects_base_path }}/kragle/ansible/files/rhn_rpm_packages.txt"
+epel_rpm_file: "{{ projects_base_path }}/dcaf-abe/ansible/files/epel_rpm_packages.txt"
+rhn_rpm_file: "{{ projects_base_path }}/dcaf-abe/ansible/files/rhn_rpm_packages.txt"
 rpm_path: "{{ resources_base_path }}/rpms/"
 scaleio_path: "{{ resources_base_path }}/scaleio/"
 
@@ -40,7 +40,7 @@ scaleio_source_zip: ScaleIO_1.32.2_Linux_SW_Download.zip
 scaleio_source_url: "http://downloads.emc.com/emc-com/usa/ScaleIO/{{scaleio_source_zip}}"
 
 git_repos:
-  - { name: "wiley", repo: "git@github.com:csc/wiley.git" }
+  - { name: "dcaf-bada", repo: "git@github.com:csc/dcaf-bada.git" }
   - { name: "slimer", repo: "git@github.com:csc/slimer.git" }
   - { name: "ansible-scaleio", repo: "git@github.com:csc/ansible-scaleio.git" }
 
@@ -73,9 +73,9 @@ autodeploy_support_pkgs:
 
 source_projects:
   - ansible-scaleio
-  - kragle
+  - dcaf-abe
   - slimer
-  - wiley
+  - dcaf-bada
 
 iso_files:
   - "{{ hnl_mk_image }}"
