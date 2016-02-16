@@ -17,7 +17,6 @@
         state: absent
       with_items:
         - { name: hanlon-mongo, image: mongo }
-#        - { name: hanlon-cassandra, image: tobert/cassandra }
         - { name: hanlon-server, image: "cscdock/hanlon:2.5.0" }
         - { name: hanlon-atftpd, image: cscdock/atftpd }
 
@@ -36,22 +35,6 @@
         command: mongod --smallfiles
         volumes: "{{ hanlon_resource }}/data/db:/data/db"
 
-#    - name: Start Cassandra Container
-#      docker:
-#        docker_api_version: "{{ docker_api_version }}"
-#        name: hanlon-cassandra
-#        image: tobert/cassandra
-#        pull: missing
-#        state: started
-#        volumes: "{{ hanlon_resource }}/data/db:/data"
-#
-#    - name: Wait for Cassandra Server to start
-#      command: docker exec hanlon-cassandra nodetool info
-#      register: result
-#      until: result.rc == 0
-#      retries: 3
-#      delay: 10
-
     - name: Remove hanlon client config file
       file:
         path: "{{ hanlon_resource }}/cli/config/hanlon_client.conf"
@@ -65,7 +48,6 @@
         pull: missing
         state: started
         ports: 8026:8026
-#        links: hanlon-cassandra:cassandra
         links: hanlon-mongo:mongo
         privileged: true
         volumes:
@@ -74,10 +56,6 @@
         env:
           DOCKER_HOST: "{{ ansible_default_ipv4.address }}"
           HANLON_SUBNETS: "{{ hanlon_subnets }}"
-# Needed for Cassandra
-#          PERSIST_MODE: "@cassandra"
-#          REPL_STRATEGY: "SimpleStrategy"
-#          REPL_FACTOR: "1"
 
     - name: Wait for Hanlon Server to start
       tags: ipxe_wait
