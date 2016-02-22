@@ -18,10 +18,11 @@
 
     - name: Install required pip-based support packages
       pip:
-        requirements: "{{ projects_base_path }}/dcaf-abe/ansible/files/pip-requirements.txt"
+        requirements: "{{ item }}"
         state: present
         extra_args: "--upgrade"
       tags: pkgs
+      with_fileglob: "files/*pip-requirements*"
 
     - name: Create the staging directories in /opt/autodeploy
       file:
@@ -148,8 +149,10 @@
       tags: docker
 
     - name: Mirror pip dependencies to /opt/autodeploy/resources/packages when offline
-      command: pip2tgz {{ packages_path }} -r {{ projects_base_path }}/dcaf-abe/ansible/files/pip-requirements.txt
+      command: pip2tgz {{ packages_path }} -r {{ item }} 
       when: offline and not (docker_py.stat.exists)
+      with_fileglob: "files/*pip-requirements*"
+      
 
     - name: Check if PyPi-compatible "simple" package exists in /opt/autodeploy/resources/packages
       stat:

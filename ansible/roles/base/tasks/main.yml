@@ -9,17 +9,19 @@
 
 - name: Install required pip-based support packages (Online)
   pip:
-    requirements: "{{ projects_base_path }}/dcaf-abe/ansible/files/pip-requirements.txt"
+    requirements: "{{ item }}" 
     state: present
     extra_args: "--upgrade"
   when: not offline
+  with_fileglob: "files/*pip-requirements*"
 
 - name: Install required pip-based support packages (Offline)
   pip:
-    requirements: "{{ projects_base_path }}/dcaf-abe/ansible/files/pip-requirements.txt"
+    requirements: "{{ item }}"
     state: present
     extra_args: "--index-url=file://{{ packages_path }}simple/"
   when: offline
+  with_fileglob: "files/*pip-requirements*"
 
 - name: Create the .ssh directory
   file:
