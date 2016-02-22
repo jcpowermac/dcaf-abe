@@ -13,7 +13,7 @@
     state: present
     extra_args: "--upgrade"
   when: not offline
-  with_fileglob: "files/*pip-requirements*"
+  with_fileglob: "../../files/*pip-requirements*"
 
 - name: Install required pip-based support packages (Offline)
   pip:
@@ -21,7 +21,7 @@
     state: present
     extra_args: "--index-url=file://{{ packages_path }}simple/"
   when: offline
-  with_fileglob: "files/*pip-requirements*"
+  with_fileglob: "../../files/*pip-requirements*"
 
 - name: Create the .ssh directory
   file:
