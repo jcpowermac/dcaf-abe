@@ -136,23 +136,18 @@
       when: offline
       tags: repo
 
-    - name: Determine name of custom Ansible RPM file
-      shell: ls ~/ansible/rpm-build/ansible-*.noarch.rpm
-      register: ansible_rpm
-      when: offline
-      tags: repo
-
     - name: Download the Ansible dependent RPMs when offline
       shell: repotrack "{{ item }}" -p "{{ rpm_path }}"
       ignore_errors: yes
-      with_items: ansible_rpm.stdout
+      with_fileglob: ~/ansible/rpm-build/ansible-*.noarch.rpm
+      when: offline
       tags: repo
 
     - name: Copy the Ansible RPM to /opt/autodeploy/resources/rpms when offline
       copy:
         src: "{{ item }}"
         dest: "{{ rpm_path }}"
-      with_items: ansible_rpm.stdout
+      with_fileglob: ~/ansible/rpm-build/ansible-*.noarch.rpm
       when: offline
       tags: repo
 
