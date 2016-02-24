@@ -31,7 +31,7 @@ hnl_rhel_min_image: rhel-server-7.2-x86_64-dvd-hnl.iso
 hnl_mk_source: https://github.com/csc/Hanlon-Microkernel/releases/download/v2.0.1/
 hnl_mk_local_path: /opt/hanlon/image/
 hnl_mk_path: /home/hanlon/image/{{ hnl_mk_image }}
-kvm_guest_image: rhel-guest-image-7.2-20151102.0.x86_64.qcow2
+kvm_guest_image: rhel-guest-image-7.2-20160219.1.x86_64.qcow2
 rhel_iso_image: rhel-server-7.2-x86_64-dvd.iso
 
 # Offline Staging vars
