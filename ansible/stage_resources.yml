@@ -157,17 +157,16 @@
       when: offline
       tags: repo
 
-    - name: Check if docker-py files exist in /opt/autodeploy/resources/packages
-      stat:
-        path: "{{ packages_path }}/{{ docker_py_zip }}"
-      register: docker_py
-      tags: docker
+    - name: Check if files exist in packages folder
+      find:
+        path: "{{ packages_path }}"
+      register: packages_files
+      when: offline
 
     - name: Mirror pip dependencies to /opt/autodeploy/resources/packages when offline
-      command: pip2tgz {{ packages_path }} -r {{ item }} 
-      when: offline and not (docker_py.stat.exists)
+      command: pip2tgz {{ packages_path }} -r {{ item }}
+      when: offline and packages_files.matched == 0
       with_fileglob: "files/*pip-requirements*"
-      
 
     - name: Check if PyPi-compatible "simple" package exists in /opt/autodeploy/resources/packages
       stat:

@@ -4,7 +4,7 @@ bridge-utils
 ceph-common
 createrepo
 dhcp
-docker-1.7.1
+docker
 fence-agents-all
 firefox
 genisoimage
