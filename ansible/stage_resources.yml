@@ -137,10 +137,16 @@
       when: offline
       tags: repo
 
+    - name: Find Ansible RPM dependencies
+      shell: yum deplist {{ item }} | grep provider | awk '{print $2}' | sort | uniq
+      with_fileglob: ~/ansible/rpm-build/ansible-*.noarch.rpm
+      register: ansible_deps
+      when: offline
+      tags: repo
+
     - name: Download the Ansible dependent RPMs when offline
       shell: repotrack "{{ item }}" -p "{{ rpm_path }}"
-      ignore_errors: yes
-      with_fileglob: ~/ansible/rpm-build/ansible-*.noarch.rpm
+      with_items: "{{ ansible_deps.results[0].stdout_lines }}"
       when: offline
       tags: repo
 
