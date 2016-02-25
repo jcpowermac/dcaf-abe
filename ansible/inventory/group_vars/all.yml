@@ -12,9 +12,8 @@ use_dcaf-bada: true
 
 # Autodeploy common vars
 autodeploy_base_path: /opt/autodeploy
-docker_api_version: 1.18
+docker_api_version: "1.20"
 docker_path: "{{ resources_base_path }}/docker/"
-docker_py_zip: docker-py-1.4.0.tar.gz
 iso_path: "{{ resources_base_path }}/ISO/"
 packages_path: "{{ resources_base_path }}/packages/"
 projects_base_path: "{{ autodeploy_base_path }}/projects"
@@ -51,7 +50,7 @@ usb_resources_path: "{{ usb_hdd }}/autodeploy/resources"
 autodeploy_support_pkgs:
   - createrepo
   - dhcp
-  - docker-1.7.1
+  - docker
   - firefox
   - genisoimage
   - httpd
