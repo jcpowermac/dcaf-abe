@@ -19,6 +19,9 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) sou
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
+# Custom
+GH_PAGES_SOURCES = source Makefile
+
 .PHONY: help
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -214,3 +217,14 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+gh-pages:
+	git checkout gh-pages
+	rm -rf build _sources _static
+	git checkout master $(GH_PAGES_SOURCES)
+	git reset HEAD
+	make html
+	mv -fv build/html/* ../
+	rm -rf $(GH_PAGES_SOURCES) build
+	git add ../
+	git ci -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
