@@ -20,7 +20,7 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) sou
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
 # Custom
-GH_PAGES_SOURCES = source Makefile
+GH_PAGES_SOURCES = docsite
 
 .PHONY: help
 help:
@@ -219,12 +219,15 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 gh-pages:
+	cd ..
 	git checkout gh-pages
-	rm -rf build _sources _static
+	rm -rf _sources _static *.html
 	git checkout master $(GH_PAGES_SOURCES)
 	git reset HEAD
+	cd docsite
 	make html
 	mv -fv build/html/* ../
-	rm -rf $(GH_PAGES_SOURCES) build
-	git add ../
-	git ci -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
+	cd ..
+	rm -rf $(GH_PAGES_SOURCES)
+	git add --all
+	git commit -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
