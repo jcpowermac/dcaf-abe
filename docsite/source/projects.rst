@@ -1,10 +1,5 @@
-Overview
+Projects
 ========
-
-The CSC Data Center Automation Framework (DCAF) is a collection of resources
-designed to automate various platforms and deployments within the data center.
-It is comprised of CSC public open source projects, CSC private projects and
-various community based open source projects.
 
 DCAF includes the following CSC projects which are kept under version control in
 a CSC GitHub repository:
