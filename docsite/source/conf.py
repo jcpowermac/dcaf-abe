@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'DCAF-ABE'
-copyright = u'2016, Automation Team'
+copyright = u'2016, CSC'
 author = u'Automation Team'
 
 # The version info for the project you're documenting, acts as replacement for
