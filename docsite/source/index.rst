@@ -14,3 +14,4 @@ Contents:
     projects
     requirements
     config_autodeploy_node
+    config_bada
