@@ -1,0 +1,46 @@
+---
+- name: Stage DCAF automation resources on autodeploynode
+  gather_facts: false
+  hosts: localhost
+  tasks:
+    - name: Extract the ScaleIO source files
+      unarchive:
+        src: "{{ scaleio_path }}/{{ scaleio_source_zip }}"
+        dest: "{{ scaleio_path }}"
+
+    - name: Find ScaleIO RPMs to be copied
+      shell: 'find {{ scaleio_path }} -type f -name "*.rpm" | egrep "RHEL7|Gateway" | egrep -v "MACOSX"'
+      register: scaleio_files
+
+    - name: Copy ScaleIO RPMs to the ansible-scaleio project
+      copy:
+        src: "{{ item }}"
+        dest: "{{ scaleio_rpm_path }}"
+      with_items: "{{ scaleio_files.stdout_lines }}"
+
+    - name: Find ScaleIO Openstack driver file to extract
+      shell: 'find {{ scaleio_path }} -type f -name {{ scaleio_os_driver_zip }} | egrep -v "MACOSX"'
+      register: os_driver_zip
+
+    - name: Extract the ScaleIO OpenStack drivers
+      unarchive:
+        src: "{{ item }}"
+        dest: "{{ scaleio_path }}"
+      with_items: "{{ os_driver_zip.stdout_lines }}"
+
+    - name: Copy ScaleIO OpenStack-Compute Drivers to ansible-scaleio project
+      copy:
+        src: "{{ scaleio_path }}/{{ item }}"
+        dest: "{{ scaleio_compute_path }}"
+      with_items: "{{ scaleio_os_files }}"
+
+    - name: Copy ScaleIO OpenStack-Controller Drivers to ansible-scaleio project
+      copy:
+        src: "{{ scaleio_path }}/{{ item }}"
+        dest: "{{ scaleio_controllers_path }}"
+      with_items: "{{ scaleio_os_files }}"
+
+    - name: Delete ScaleIO zip
+      file:
+        path: "{{ scaleio_path }}/{{ scaleio_source_zip }}"
+        state: absent

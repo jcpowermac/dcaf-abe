@@ -1,0 +1,67 @@
+---
+# This playbook will prepare the staging directories and retrieve the automation resources for the
+# autodeploynode. The resources will be staged locally in the /opt/autodeploy/projects/ and
+# opt/autodeploy/resources/ directories.
+
+- name: Stage DCAF automation resources on autodeploynode
+  gather_facts: false
+  hosts: localhost
+  tasks:
+
+
+    # Since we are downloading this is in a container at build time 
+    # there is no reason to check if the microkernel exists or anything
+    # else for that matter.
+    - name: Download the Hanlon microkernel image to /opt/autodeploy/resources/ISO
+      get_url:
+        url: "{{ hnl_mk_source }}{{ hnl_mk_image }}"
+        dest: "{{ iso_path }}"
+      tags: iso
+
+# There two separate selenium downloads here because the authtoken on the link will time out
+#    - name: Find the RHEL DVD ISO file url
+#      selenium:
+#        url: "{{ rhel_download_url }}"
+#        username: "{{ rhn_user }}"
+#        password: "{{ rhn_pass }}"
+#        username_element_id: username
+#        password_element_id: password
+#        xpath: '//*[contains(@href,"{{ rhel_iso_image }}")]'
+#      register: rhel_get_url
+#      tags: iso
+#
+#    - name: Download the RHEL DVD ISO file to /opt/autodeploy/resources/ISO
+#      get_url:
+#        url: "{{ rhel_get_url.url }}"
+#        dest: "{{ iso_path }}"
+#      tags: iso
+#
+    - name: Download the RHEL DVD ISO file to /opt/autodeploy/resources/ISO
+      get_url:
+        url: "http://10.53.252.60/rhel-server-7.2-x86_64-dvd.iso"
+        dest: "{{ iso_path }}"
+      tags: iso
+# There two separate selenium downloads here because the authtoken on the link will time out
+#    - name: Find the Red Hat KVM Guest Image file url
+#      selenium:
+#        url: "{{ rhel_download_url }}"
+#        username: "{{ rhn_user }}"
+#        password: "{{ rhn_pass }}"
+#        username_element_id: username
+#        password_element_id: password
+#        xpath: '//*[contains(@href,"{{ kvm_guest_image }}")]'
+#      register: kvm_get_url
+#      tags: iso
+#
+#    - name: Download the KVM Guest Image file to /opt/autodeploy/resources/ISO
+#      get_url:
+#        url: "{{ kvm_get_url.url }}"
+#        dest: "{{ iso_path }}"
+#      tags: iso
+#
+    - name: Download ScaleIO files for ansible-scaleio to /opt/autodeploy/resources/scaleio
+      get_url:
+        url: "http://10.53.252.60/ScaleIO_1.32.2_Linux_SW_Download.zip"
+        dest: "{{ scaleio_path }}"
+      tags: scaleio
+#

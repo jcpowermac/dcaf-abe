@@ -1,0 +1,81 @@
+---
+# Required User Variables
+rhn_user: josephcallen
+rhn_pass: 6lQwG3Q5Vb0L
+github_key_file:
+
+# Offline autodeploy vars
+use_scaleio: true
+use_dcaf-bada: true
+
+# Autodeploy common vars
+autodeploy_base_path: /opt/autodeploy
+docker_api_version: "1.20"
+docker_path: "{{ resources_base_path }}/docker/"
+iso_path: "{{ resources_base_path }}/ISO/"
+
+packages_path: "{{ resources_base_path }}/packages/"
+
+projects_base_path: "{{ autodeploy_base_path }}/projects"
+resources_base_path: "{{ autodeploy_base_path }}/resources"
+scaleio_path: "{{ resources_base_path }}/scaleio/"
+
+
+rhel_iso_path: "{{ iso_path }}/{{ rhel_iso_image }}"
+rhel_extract_iso_path: "{{ iso_path }}/rhel/"
+rhel_packages_path: "{{ rhel_extract_iso_path }}/Packages"
+
+label: "RHEL-7.2 Server.x86_64"
+
+
+# Autodeploy site_discovery vars:
+
+hnl_mk_image: hnl_mk_debug-image.2.0.1.iso
+hnl_rhel_min_image: rhel-server-7.2-x86_64-dvd-hnl.iso
+
+hnl_rhel_iso_path: "{{ hanlon_image_path }}/{{ hnl_rhel_min_image }}"
+
+hnl_mk_source: https://github.com/csc/Hanlon-Microkernel/releases/download/v2.0.1/
+hnl_mk_local_path: /opt/hanlon/image/
+hnl_mk_path: /home/hanlon/image/{{ hnl_mk_image }}
+kvm_guest_image: rhel-guest-image-7.2-20160219.1.x86_64.qcow2
+rhel_iso_image: rhel-server-7.2-x86_64-dvd.iso
+
+# Offline Staging vars
+rhel_download_url: https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.2/x86_64/product-downloads
+scaleio_source_zip: ScaleIO_1.32.2_Linux_SW_Download.zip
+scaleio_source_url: "http://downloads.emc.com/emc-com/usa/ScaleIO/{{scaleio_source_zip}}"
+
+pip_pkg_ver:
+    - { name: pip2pi, version: 0.6.8 }
+    - { name: selenium, version: 2.48.0 }
+
+autodeploy_support_pkgs:
+  - createrepo
+  - firefox
+  - genisoimage
+  - python-netaddr
+  - python-passlib
+  - python-pip
+  - python-xvfbwrapper
+  - sshpass
+  - unzip
+  - vim
+  - wget
+  - xorg-x11-server-Xvfb
+  - yum-utils
+  - openssl-devel
+  - p7zip
+  - p7zip-plugins
+
+ansible_scaleio_path: "{{ projects_base_path }}/ansible-scaleio/"
+scaleio_rpm_path: "{{ ansible_scaleio_path }}/files/"
+scaleio_compute_path: "{{ ansible_scaleio_path }}/roles/openstack-compute/files/"
+scaleio_controllers_path: "{{ ansible_scaleio_path }}/roles/openstack-controllers/files/"    
+scaleio_os_driver_zip: EMC-ScaleIO-openstack-driver-1.32-2451.4-juno.zip
+scaleio_os_files:
+  - scaleio.filters
+  - scaleio.py
+  - scaleio_config.py
+  - scaleio_install.py
+  - scaleiolibvirtdriver.py

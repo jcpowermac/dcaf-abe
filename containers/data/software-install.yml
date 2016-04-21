@@ -1,0 +1,79 @@
+---
+# This playbook will prepare the staging directories and retrieve the automation resources for the
+# autodeploynode. The resources will be staged locally in the /opt/autodeploy/projects/ and
+# opt/autodeploy/resources/ directories.
+
+- name: Stage DCAF automation resources on autodeploynode
+  gather_facts: false
+  hosts: localhost
+  vars:
+  tasks:
+    - name: Create the staging directories in /opt/autodeploy
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "{{ projects_base_path }}"
+        - "{{ resources_base_path }}"
+
+    - name: Create the resource directories in the staging directories
+      file:
+        path: "{{ resources_base_path }}/{{ item }}"
+        state: directory
+      with_items: "{{ resource_dirs }}"
+
+    - name: Install epel
+      yum:
+        pkg: epel-release
+        state: present
+
+    - name: Install required support packages
+      yum:
+        pkg: "{{ item }}"
+        state: present
+      with_items: "{{ autodeploy_support_pkgs }}"
+
+    - name: Install pip-based packages without version
+      pip:
+        name: "{{ item }}" 
+        state: present
+      with_items: "{{ pip_pkg }}"
+ 
+    - name: Install pip-based packages with version
+      pip:
+        name: "{{ item.name }}"
+        version: "{{ item.version }}"
+        state: present
+      with_items: "{{ pip_pkg_ver }}"      
+    
+    - name: Create machine-id
+      shell: dbus-uuidgen > /etc/machine-id
+
+    - name: Clone the project repos from Git
+      git:
+        repo: "{{ item.repo }}"
+        dest: "{{ projects_base_path }}/{{ item.name }}"
+        accept_hostkey: yes
+        key_file: "{{ github_key_file }}"
+      with_items: "{{ git_repos }}"
+      ignore_errors: true
+
+    - name: Checkout the latest tagged version
+      shell: "git checkout $(git describe --abbrev=0 --tags)"
+      args:
+        chdir: "{{ projects_base_path }}/{{ item.name }}"
+      with_items: "{{ git_repos }}"
+
+    - name: Update default Ansible configuration
+      lineinfile:
+        dest: /etc/ansible/ansible.cfg
+        regexp: "(^#|^){{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: 'inventory', line: 'inventory = ./hosts.ini' }
+        - { regexp: 'forks', line: 'forks = 20' }
+        - { regexp: 'host_key_checking', line: 'host_key_checking = False' }
+        - { regexp: 'log_path', line: 'log_path = ./ansible.log' }
+        - { regexp: 'ssh_args', line: 'ssh_args = -o ControlMaster=auto -o ControlPersist=60s' }
+        - { regexp: 'pipelining', line: 'pipelining = True' }
+
